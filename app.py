@@ -16,7 +16,7 @@ def webhook():
 
     # Handle Study Timer intent
     if intent_name == "Study Timer":
-        duration = req['queryResult']['parameters'].get('duration', None)
+        duration = req['queryResult']['parameters'].get('Duration', None)
 
         # Check if duration was provided
         if duration:
