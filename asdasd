@@ -1,0 +1,64 @@
+[33mcommit ab60e9a4f7db41d87ff525eb33d541242ffef2b1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Niyaz <niyazmohamed14@gmail.com>
+Date:   Fri Mar 21 14:51:32 2025 -0400
+
+    first commit
+
+[1mdiff --git a/app.py b/app.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5d7a502[m
+[1m--- /dev/null[m
+[1m+++ b/app.py[m
+[36m@@ -0,0 +1,36 @@[m
+[32m+[m[32mfrom flask import Flask, request, jsonify[m
+[32m+[m[32mimport datetime[m
+[32m+[m
+[32m+[m[32mapp = Flask(__name__)[m
+[32m+[m
+[32m+[m[32m# Route to return student number[m
+[32m+[m[32m@app.route('/')[m
+[32m+[m[32mdef home():[m
+[32m+[m[32m    return jsonify({"student_number": "200615666"})[m[41m [m
+[32m+[m
+[32m+[m[32m# Webhook route for fulfillment[m
+[32m+[m[32m@app.route('/webhook', methods=['POST'])[m
+[32m+[m[32mdef webhook():[m
+[32m+[m[32m    req = request.get_json(silent=True, force=True)[m
+[32m+[m[32m    intent_name = req['queryResult']['intent']['displayName'][m
+[32m+[m
+[32m+[m[32m    # Handle Study Timer intent[m
+[32m+[m[32m    if intent_name == "Study Timer":[m
+[32m+[m[32m        duration = req['queryResult']['parameters'].get('duration', None)[m
+[32m+[m
+[32m+[m[32m        # Check if duration was provided[m
+[32m+[m[32m        if duration:[m
+[32m+[m[32m            duration_seconds = int(duration['amount']) * 60  # Convert minutes to seconds[m
+[32m+[m[32m            response_text = f"Great! I’ve set a {duration['amount']} {duration['unit']} study timer. Stay focused!"[m
+[32m+[m[32m        else:[m
+[32m+[m[32m            response_text = "How long should I set the study timer for?"[m
+[32m+[m
+[32m+[m[32m    # Fallback if intent is not recognized[m
+[32m+[m[32m    else:[m
+[32m+[m[32m        response_text = "Hmm... I didn’t quite get that. Can you try again?"[m
+[32m+[m
+[32m+[m[32m    # Return the response[m
+[32m+[m[32m    return jsonify({"fulfillmentText": response_text})[m
+[32m+[m
+[32m+[m[32mif __name__ == '__main__':[m
+[32m+[m[32m    app.run(debug=True)[m
+[1mdiff --git a/requirements.txt b/requirements.txt[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e4a286c[m
+[1m--- /dev/null[m
+[1m+++ b/requirements.txt[m
+[36m@@ -0,0 +1,2 @@[m
+[32m+[m[32mflask[m
+[32m+[m[32mgunicorn[m
+[1mdiff --git a/start.sh b/start.sh[m
+[1mnew file mode 100644[m
+[1mindex 0000000..8b0f5b8[m
+[1m--- /dev/null[m
+[1m+++ b/start.sh[m
+[36m@@ -0,0 +1,2 @@[m
+[32m+[m[32m#!/bin/bash[m
+[32m+[m[32mgunicorn app:app --bind 0.0.0.0:8080[m

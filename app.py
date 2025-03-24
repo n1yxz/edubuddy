@@ -20,7 +20,6 @@ def webhook():
 
         # Check if duration was provided
         if duration:
-            duration_seconds = int(duration['amount']) * 60  # Convert minutes to seconds
             response_text = f"Great! I’ve set a {duration['amount']} {duration['unit']} study timer. Stay focused!"
         else:
             response_text = "How long should I set the study timer for?"
@@ -33,4 +32,4 @@ def webhook():
     return jsonify({"fulfillmentText": response_text})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080)
